@@ -1,0 +1,89 @@
+{% extends 'base.html' %} {% block title %}Upload Pdf{% endblock %} {% block main_content %}
+<div class="page-wrapper">
+  <div class="page-content-wrapper">
+    <div class="page-content">
+      <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Upload PDF</div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item">
+                <a href="/view-data"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Files Upload
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6 mx-auto">
+          <div class="card radius-15">
+            <div class="card-body">
+              {% if error %}
+              <ul class="alert alert-danger" style="list-style-type: none;">
+                <li>{{error}}</li>
+              </ul>
+              {% endif %}
+              <div class="card-title">
+                <h4 class="mb-0">Files Upload</h4>
+              </div>
+              <hr />
+              <form action="{% url 'fileapp:uploads' %}" method="POST" enctype="multipart/form-data"
+                class="row g-3 needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="col-12">
+                  <label for="form-label" class="form-label text-dark">Upload File Here
+                    *</label>
+                  <input name="upload_files" required type="file" class="form-control"
+                    accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple />
+                </div>
+                <div class="col-6">
+                  <button class="btn btn-outline-primary rounded-pill mt-4" type="submit" id="insert">
+                    <i class="fadeIn animated bx bx-file"></i>Upload Files
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  (function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          } else {
+            const button = document.getElementById("insert");
+            button.innerHTML =
+              "<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Processing...";
+            button.setAttribute('disabled', 'disabled');
+            // setTimeout(time, 1000);
+
+            // function time() {
+            //     button.removeAttribute('disabled');
+            //     button.innerHTML = "Add " + module_name;
+            // }
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>
+{% endblock %}
